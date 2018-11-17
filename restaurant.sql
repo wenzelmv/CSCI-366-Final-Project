@@ -25,7 +25,7 @@ DROP TABLE Menu_Item;
 
 CREATE TABLE Store
 (
- store_id  int NOT NULL ,
+ store_id  int GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
  store_num decimal NOT NULL ,
  city      varchar(45) NOT NULL ,
  state     varchar(45) NOT NULL ,
@@ -43,7 +43,7 @@ PRIMARY KEY (store_id)
 
 CREATE TABLE Side
 (
- side_id   int NOT NULL ,
+ side_id   int GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
  side_name varchar(45) NOT NULL ,
 PRIMARY KEY (side_id)
 );
@@ -57,7 +57,7 @@ PRIMARY KEY (side_id)
 
 CREATE TABLE Menu_Item
 (
- menu_item_id int NOT NULL ,
+ menu_item_id int GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
  item_name    varchar(45) NOT NULL ,
  item_price   decimal NOT NULL ,
 PRIMARY KEY (menu_item_id)
@@ -72,7 +72,7 @@ PRIMARY KEY (menu_item_id)
 
 CREATE TABLE Server
 (
- server_id    int NOT NULL ,
+ server_id    int GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
  employee_num int NOT NULL ,
  first_name   varchar(45) NOT NULL ,
  last_name    varchar(45) NOT NULL ,
@@ -91,7 +91,7 @@ CONSTRAINT FK_35 FOREIGN KEY (store_id) REFERENCES Store (store_id)
 
 CREATE TABLE Menu_Item_Side
 (
- menu_item_side_id int NOT NULL ,
+ menu_item_side_id int GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
  menu_item_id      int NOT NULL ,
  side_id           int NOT NULL ,
 PRIMARY KEY (menu_item_side_id),
@@ -108,7 +108,7 @@ CONSTRAINT FK_75 FOREIGN KEY (side_id) REFERENCES Side (side_id)
 
 CREATE TABLE Ticket
 (
- ticket_id    int NOT NULL ,
+ ticket_id    int GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
  ticket_num   int NOT NULL ,
  ticket_date  date NOT NULL ,
  payment_type varchar(45) NOT NULL ,
@@ -128,7 +128,7 @@ CONSTRAINT FK_46 FOREIGN KEY (server_id) REFERENCES Server (server_id)
 
 CREATE TABLE Ticket_Menu_Item
 (
- Ticket_menu_item_id int NOT NULL ,
+ Ticket_menu_item_id int GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
  ticket_id           int NOT NULL ,
  menu_item_id        int NOT NULL ,
 PRIMARY KEY (Ticket_menu_item_id),
