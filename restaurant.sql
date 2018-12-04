@@ -21,6 +21,26 @@ DROP TABLE Side;
 DROP TABLE Menu_Item;
 
 
+DROP TABLE Ticket;
+
+
+DROP TABLE Server;
+
+
+DROP TABLE Menu_Item_Side;
+
+
+DROP TABLE Store;
+
+
+DROP TABLE Side;
+
+
+DROP TABLE Menu_Item;
+
+
+COMMIT;
+
 -- ************************************** Store
 
 CREATE TABLE Store
@@ -59,7 +79,11 @@ CREATE TABLE Menu_Item
 (
  menu_item_id int GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
  item_name    varchar(45) NOT NULL ,
+<<<<<<< HEAD
  item_price   decimal NOT NULL ,
+=======
+ item_price   DECIMAL(5,2) NOT NULL ,
+>>>>>>> f4e8e3f3466e17eadc3f5c40ba64e71d72c88232
 PRIMARY KEY (menu_item_id)
 );
 
@@ -112,7 +136,11 @@ CREATE TABLE Ticket
  ticket_num   int NOT NULL ,
  ticket_date  date NOT NULL ,
  payment_type varchar(45) NOT NULL ,
+<<<<<<< HEAD
  tip_amount   decimal NOT NULL ,
+=======
+ tip_amount   DECIMAL(5,2) NOT NULL ,
+>>>>>>> f4e8e3f3466e17eadc3f5c40ba64e71d72c88232
  if_paid      varchar(45) NOT NULL ,
  server_id    int NOT NULL ,
 PRIMARY KEY (ticket_id),
@@ -135,6 +163,9 @@ PRIMARY KEY (Ticket_menu_item_id),
 CONSTRAINT FK_52 FOREIGN KEY (ticket_id) REFERENCES Ticket (ticket_id),
 CONSTRAINT FK_61 FOREIGN KEY (menu_item_id) REFERENCES Menu_Item (menu_item_id)
 );
+
+
+COMMIT;
 
 
 
