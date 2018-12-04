@@ -1,38 +1,7 @@
 <!DOCTYPE HTML>  
 <html>
 <head>
-<style>
-/* Add a black background color to the top navigation */
-.topnav {
-    background-color: #333;
-    overflow: hidden;
-}
-
-/* Style the links inside the navigation bar */
-.topnav a {
-    float: left;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 17px;
-}
-
-/* Change the color of links on hover */
-.topnav a:hover {
-    background-color: #ddd;
-    color: black;
-}
-
-/* Add a color to the active/current link */
-.topnav a.active {
-    background-color: #4CAF50;
-    color: white;
-}
-
-/* error color */
-.error {color: #FF0000;}
-</style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -41,7 +10,8 @@
 <div class="topnav">
   <a href="home.php">Home</a>
   <a class="active" href="#create_menu_item">Create Menu Item</a>
-  <a href="order_meal.php">Order Meal</a>
+  <a href="servers.php">Servers</a>
+  <a href="store.php">Add Store</a>
   <a href="about.php">About</a>
 </div>
 
@@ -49,8 +19,7 @@
 <?php
 
 // Create database connection
-$conn = oci_connect('andmason', 'May301996', '(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(Host=db2.ndsu.edu)(Port=1521)))(CONNECT_DATA=(SID=cs)))');
->>>>>>> f4e8e3f3466e17eadc3f5c40ba64e71d72c88232
+$conn = oci_connect('miwenzel', 'Jul691997', '(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(Host=db2.ndsu.edu)(Port=1521)))(CONNECT_DATA=(SID=cs)))');
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
@@ -82,14 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     else {
         $miName = test_input($_POST["miName"]);
     }
-    // check if menu item name only contains letters and whitespace
-    if (!preg_match("/^[a-zA-Z ]*$/",$miName)) {
-        $miNameErr = "Only letters and white space allowed";
- 	$miName = NULL;
-    }
-    else {
-        $miNameErr = "";
-    }
     // Validate menu item price
     if (empty($_POST["miPrice"])) {
         $miPriceErr = "Item price is required, even if 0.00";
@@ -97,14 +58,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     else {
         $miPrice = test_input($_POST["miPrice"]);
     }
-    // check if menu item price is a valid number
-    if (!is_float($miPrice)) {
-        $miPriceErr = "Please enter a number"; 
-	$miPrice = NULL;
-    }
-    else {
-        $miPrice = test_input($_POST["miPrice"]);
-
     // check if menu item price is a valid number
     if (filter_var($miPrice, FILTER_VALIDATE_FLOAT) === false) {
         $miPriceErr = "Please enter a number";
@@ -120,69 +73,76 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     else {
         $sideName = test_input($_POST["sideName"]);
     }
-    // check if side name only contains letters and whitespace
-    if (!preg_match("/^[a-zA-Z ]*$/",$sideName)) {
-        $sideNameErr = "Only letters and white space allowed";
- 	$sideName = NULL;
-    }
-    else {
-        $sideNameErr = "";
-    }
-}
+
+    //select Menu_Item.item_name, Side.side_name from Menu_Item INNER JOIN Side ON Menu_Item.menu_item_id = Side.side_id;
+
+    //if menu item name exists && side name exists => do nothing  
+    echo $miName . '    ' . $miPrice;
+    echo '<br/>';
+    echo $sideName;
+    //select * from Menu_Item where Menu_Item.item_name = '$miName'";
 
 
+    $query = "insert into Menu_Item (item_name, item_price) SELECT '$miName', '$miPrice' FROM dual WHERE NOT EXISTS (select * from Menu_Item where Menu_Item.item_name = '$miName')";
+    $stid = oci_parse($conn,$query);
+    oci_execute($stid,OCI_DEFAULT);
 
-//select Menu_Item.item_name, Side.side_name from Menu_Item INNER JOIN Side ON Menu_Item.menu_item_id = Side.side_id;
+    $query = 'COMMIT';
+    $stid = oci_parse($conn,$query);
+    oci_execute($stid,OCI_DEFAULT);
 
-//if menu item name exists && side name exists => do nothing  
-echo $miName . '    ' . $miPrice;
-echo '<br/>';
-echo $sideName;
-//select * from Menu_Item where Menu_Item.item_name = '$miName'";
+    $query = "insert into Side (side_name) SELECT '$sideName' FROM dual WHERE NOT EXISTS (select * from Side where Side.side_name = '$sideName')";
+    $stid = oci_parse($conn,$query);
+    oci_execute($stid,OCI_DEFAULT);
 
+    $query = 'COMMIT';
+    $stid = oci_parse($conn,$query);
+    oci_execute($stid,OCI_DEFAULT);
 
-$query = "insert into Menu_Item (item_name, item_price) SELECT '$miName', '$miPrice' FROM dual WHERE NOT EXISTS (select * from Menu_Item where Menu_Item.item_name = '$miName')";
-$stid = oci_parse($conn,$query);
-oci_execute($stid,OCI_DEFAULT);
+    $query = "insert into Menu_Item_Side (menu_item_id, side_id) SELECT (Select menu_item_id from Menu_Item where Menu_Item.item_name = '$miName') , (Select side_id from Side where Side.side_name = '$sideName') FROM dual WHERE NOT EXISTS (select * from Menu_Item_Side where Menu_Item_Side.menu_item_id = (Select menu_item_id from Menu_Item where Menu_Item.item_name = '$miName') AND Menu_Item_Side.side_id = (Select side_id from Side where Side.side_name = '$sideName'))";
+    $stid = oci_parse($conn,$query);
+    oci_execute($stid,OCI_DEFAULT);
 
-$query = 'COMMIT';
-$stid = oci_parse($conn,$query);
-oci_execute($stid,OCI_DEFAULT);
-
-$query = "insert into Side (side_name) SELECT '$sideName' FROM dual WHERE NOT EXISTS (select * from Side where Side.side_name = '$sideName')";
-$stid = oci_parse($conn,$query);
-oci_execute($stid,OCI_DEFAULT);
-
-$query = 'COMMIT';
-$stid = oci_parse($conn,$query);
-oci_execute($stid,OCI_DEFAULT);
-
-$query = "insert into Menu_Item_Side (menu_item_id, side_id) SELECT (Select menu_item_id from Menu_Item where Menu_Item.item_name = '$miName') , (Select side_id from Side where Side.side_name = '$sideName') FROM dual WHERE NOT EXISTS (select * from Menu_Item_Side where Menu_Item_Side.menu_item_id = (Select menu_item_id from Menu_Item where Menu_Item.item_name = '$miName') AND Menu_Item_Side.side_id = (Select side_id from Side where Side.side_name = '$sideName'))";
-$stid = oci_parse($conn,$query);
-oci_execute($stid,OCI_DEFAULT);
-
-$query = 'COMMIT';
-$stid = oci_parse($conn,$query);
-oci_execute($stid,OCI_DEFAULT);
+    $query = 'COMMIT';
+    $stid = oci_parse($conn,$query);
+    oci_execute($stid,OCI_DEFAULT);
 
 
-/*
-//iterate through each row
-while ($row = oci_fetch_array($stid,OCI_ASSOC)) 
-{
-    //iterate through each item in the row and echo it  
-    foreach ($row as $item)    
+     /*
+    //iterate through each row
+    while ($row = oci_fetch_array($stid,OCI_ASSOC)) 
     {
-        echo $item.' ';
-    }   
-echo '<br/>';}
-*/
+        //iterate through each item in the row and echo it  
+        foreach ($row as $item)    
+        {
+            echo $item.' ';
+        }   
+    echo '<br/>';}
+    */
+  
+    $query = "SELECT * FROM Menu_Item";
+    $stid = oci_parse($conn,$query);
+    oci_execute($stid,OCI_DEFAULT);
+
+    echo "<table border='1'>
+    <tr>
+    <th>Id</th>
+    <th>Item Name</th>
+    <th>Item Price</th>
+    </tr>";
+
+    while ($row = oci_fetch_array($stid,OCI_NUM)) {
+    	echo "<tr>";
+	echo "<td>" . $row[0] . "</td>";
+	echo "<td>" . $row[1] . "</td>";
+	echo "<td>" . $row[2] . "</td>";
+	echo "</tr>";
+    }
+    echo "</table>";
 
 
-
-oci_free_statement($stid);
-oci_close($conn);
-
+    oci_free_statement($stid);
+    oci_close($conn);
 }
 
 function test_input($data) {
@@ -211,7 +171,6 @@ function test_input($data) {
     <p><span class="error">* required field</span></p>
 
 </form>
-
 
 </body>
 </html>
