@@ -12,10 +12,7 @@
   <a href="create_menu_item.php">Create Menu Item</a>
   <a href="servers.php">Servers</a>
   <a class="active" href="#store">Add Store</a>
-<<<<<<< HEAD
-=======
   <a href="order_meal.php">Order Meal</a>
->>>>>>> 036b5e8e6c726be2707c29210e5d6c9840e8976f
   <a href="about.php">About</a>
 </div>
 
@@ -67,14 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     else {
         $state = test_input($_POST["state"]);
     }
-    // Check if state only contains letters and whitespace
-    if (!preg_match("/^[a-zA-Z ]*$/",$state)) {
-        $stateErr = "Only letters and white space allowed"; 
-	$state = NULL;
-    }
-    else {
-        $state = test_input($_POST["state"]);
-    }
 
     // Validate zip code
     if (empty($_POST["zip"])) {
@@ -108,7 +97,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo '<br/>';
     echo $phone;
 
-    $query = "INSERT INTO Store(city, state, zip, phone_num) VALUES ('$city', '$state', $zip, '$phone')";
+    $query = "INSERT INTO Store (city, state, zip, phone_num) SELECT '$city', '$state', $zip, '$phone'
+	      FROM dual WHERE NOT EXISTS (SELECT * FROM Store WHERE Store.phone_num = '$phone')";
     $stid = oci_parse($conn,$query);
     oci_execute($stid,OCI_DEFAULT);
 
@@ -158,8 +148,57 @@ function test_input($data) {
     <br><br>
 
     State: <br/>
-    <input type="text" name="state">
-    <span class="error">* <?php echo $stateErr;?></span>
+    <select name="state">
+	<option value="AL">Alabama</option>
+	<option value="AK">Alaska</option>
+	<option value="AZ">Arizona</option>
+	<option value="CA">California</option>
+	<option value="CO">Colorado</option>
+	<option value="CT">Connecticut</option>
+	<option value="DE">Delaware</option>
+	<option value="FL">Florida</option>
+	<option value="GA">Georgia</option>
+	<option value="HI">Hawaii</option>
+	<option value="ID">Idaho</option>
+	<option value="IL">Illinois</option>
+	<option value="IN">Indiana</option>
+	<option value="IA">Iowa</option>
+	<option value="KS">Kansas</option>
+	<option value="KY">Kentucky</option>
+	<option value="LA">Louisiana</option>
+	<option value="ME">Maine</option>
+	<option value="MD">Maryland</option>
+	<option value="MA">Massachusetts</option>
+	<option value="MI">Michigan</option>
+	<option value="MN">Minnesota</option>
+	<option value="MS">Mississippi</option>
+	<option value="MO">Missouri</option>
+	<option value="MT">Montana</option>
+	<option value="NE">Nebraska</option>
+	<option value="NV">Nevada</option>
+	<option value="NH">New Hampshire</option>
+	<option value="NJ">New Jersey</option>
+	<option value="NM">New Mexico</option>
+	<option value="NY">New York</option>
+	<option value="NC">North Carolina</option>
+	<option value="ND">North Dakota</option>
+	<option value="OH">Ohio</option>
+	<option value="OK">Oklahoma</option>
+	<option value="OR">Oregon</option>
+	<option value="PA">Pennsylvania</option>
+	<option value="RI">Rhode Island</option>
+	<option value="SC">South Carolina</option>
+	<option value="SD">South Dakota</option>
+	<option value="TN">Tennessee</option>
+	<option value="TX">Texas</option>
+	<option value="UT">Utah</option>
+	<option value="VT">Vermont</option>
+	<option value="VA">Virginia</option>
+	<option value="WA">Washington</option>
+	<option value="WV">West Virginia</option>
+	<option value="WI">Wisconsin</option>
+	<option value="WY">Wyoming</option>
+    </select>
     <br><br>
 
     Zip code: <br/>

@@ -18,15 +18,18 @@
 
 <h2>Create Menu Item</h2>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
-    Enter menu item name: <input type="text" name="miName">
+    Enter menu item name: <br/>
+    <input type="text" name="miName">
     <span class="error">* <?php echo $miNameErr;?></span>
     <br><br>
 
-    Enter menu item price: <input type="number" step="0.01" name="miPrice">
+    Enter menu item price: <br/>
+    <input type="number" step="0.01" name="miPrice">
     <span class="error">* <?php echo $miPriceErr;?></span>
     <br><br>
 
-    Enter side name: <input type="text" name="sideName">
+    Enter side name: <br/>
+    <input type="text" name="sideName">
     <span class="error">* <?php echo $sideNameErr;?></span>
     <br><br>
 
@@ -37,11 +40,13 @@
 
 <h2>Delete Menu Item</h2>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
-    Enter menu item name to delete: <input type="text" name="miNameDelete">
+    Enter menu item name to delete: <br/>
+    <input type="text" name="miNameDelete">
     <span class="error">* <?php echo $miNameErrDelete;?></span>
     <br><br>
 
-    Enter side name to delete: <input type="text" name="sideNameDelete">
+    Enter side name to delete: <br/>
+    <input type="text" name="sideNameDelete">
     <span class="error">* <?php echo $sideNameErrDelete;?></span>
     <br><br>
 
@@ -218,7 +223,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }   
     echo '<br/>';}
     */
-  
+    /*
     $query = "SELECT * FROM Menu_Item";
     $stid = oci_parse($conn,$query);
     oci_execute($stid,OCI_DEFAULT);
@@ -238,6 +243,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	echo "</tr>";
     }
     echo "</table>";
+    */
 
     $query = "DELETE FROM (SELECT item_name, item_price, side_name FROM Menu_Item_Side INNER JOIN Menu_Item ON Menu_Item.menu_item_id = Menu_Item_Side.menu_item_id INNER JOIN Side ON Side.side_id = Menu_Item_Side.side_id) WHERE item_name = '$miNameDelete' AND side_name = '$sideNameDelete'";
     $stid = oci_parse($conn,$query);

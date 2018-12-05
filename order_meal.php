@@ -10,7 +10,7 @@
 <div class="topnav">
   <a href="home.php">Home</a>
   <a href="create_menu_item.php">Create Menu Item</a>
-  <a href="#servers">Servers</a>
+  <a href="servers.php">Servers</a>
   <a href="store.php">Add Store</a>
   <a class="active" href="order_meal.php">Order Meal</a>
   <a href="about.php">About</a>
