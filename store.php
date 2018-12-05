@@ -12,6 +12,10 @@
   <a href="create_menu_item.php">Create Menu Item</a>
   <a href="servers.php">Servers</a>
   <a class="active" href="#store">Add Store</a>
+<<<<<<< HEAD
+=======
+  <a href="order_meal.php">Order Meal</a>
+>>>>>>> 036b5e8e6c726be2707c29210e5d6c9840e8976f
   <a href="about.php">About</a>
 </div>
 
