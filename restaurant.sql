@@ -2,27 +2,32 @@
 -- ***************************************************;
 DROP TABLE Ticket_Menu_Item;
 
+
 DROP TABLE Ticket;
+
 
 DROP TABLE Server;
 
+
 DROP TABLE Menu_Item_Side;
+
 
 DROP TABLE Store;
 
+
 DROP TABLE Side;
+
 
 DROP TABLE Menu_Item;
 
-COMMIT;
 
+COMMIT;
 
 -- ************************************** Store
 
 CREATE TABLE Store
 (
  store_id  int GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
- store_num decimal NOT NULL ,
  city      varchar(45) NOT NULL ,
  state     varchar(45) NOT NULL ,
  zip       int NOT NULL ,
@@ -132,6 +137,8 @@ CONSTRAINT FK_52 FOREIGN KEY (ticket_id) REFERENCES Ticket (ticket_id),
 CONSTRAINT FK_61 FOREIGN KEY (menu_item_id) REFERENCES Menu_Item (menu_item_id)
 );
 
+
 COMMIT;
+
 
 
